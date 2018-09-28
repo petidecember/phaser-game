@@ -1,10 +1,9 @@
 {
-	"name": "udptester",
+	"name": "phasermulti-test",
 	"version": "0.0.1",
-	"description": "test udp traffic",
+	"description": "some multiplayer game made with phaser",
 	"dependencies": {
 		"express": "^4.16.3",
 		"ws": "^6.0.0"
-	}, 
-   "scripts": { "start": "node server" } 
+	} 
 }
