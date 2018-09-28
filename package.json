@@ -1,0 +1,10 @@
+{
+	"name": "udptester",
+	"version": "0.0.1",
+	"description": "test udp traffic",
+	"dependencies": {
+		"express": "^4.16.3",
+		"ws": "^6.0.0"
+	}, 
+   "scripts": { "start": "node server" } 
+}
