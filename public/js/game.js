@@ -18,7 +18,7 @@ const PI2 = Math.PI * 2.0;
 var volume = new Tone.Volume(-12);
 var game = new Phaser.Game(config); 
 var fft = new Tone.FFT(FFT_LENGTH);
-var player = new Tone.Player("../audio/Flags on the Moon.wav", function() { player.start(); }).chain(fft, volume, Tone.Master);
+var player = new Tone.Player("../audio/Flags on the Moon.mp3", function() { player.start(); }).chain(fft, volume, Tone.Master);
 var req;
 
 var lines = [];
