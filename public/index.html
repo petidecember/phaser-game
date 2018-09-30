@@ -2,11 +2,21 @@
 <html>
 	<head>
 		<title>Something interesting</title>
-		<meta charset="utf-8"/>
+		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, height=device-height, user-scalable=no" />
-		<link rel="stylesheet" href="style.css"></link>
+		<link rel="stylesheet" href="style.css" />
+		<link rel="manifest" href="manifest.json" />
+		<link rel="icon" href="img/icon-192.png" sizes="192x192" />
+		<link rel="icon" href="img/icon-512.png" sizes="512x512" />
 	</head>
 	<body>
+		<div id="installModal" class="modal">
+			<div class="modal-content">
+				<span class="close">X</span>
+				<p>Add to home screen?</p>
+				<button onclick="javascript:offlinePrompt()">Install</button>
+			</div>
+		</div>
 		<script>
 			if('serviceWorker' in navigator) {
 				window.addEventListener('load', function() {
@@ -17,7 +27,33 @@
 							console.log('ServiceWorker registration failed: ', err);
 						});
 				});
-			}			
+			}
+			
+			let deferredPrompt;
+			var modal = document.getElementById('installModal');
+			var span = document.getElementsByClassName('close')[0];
+			modal.style.display = 'none';
+			
+			window.addEventListener('beforeinstallprompt', function(e) {
+				console.log('beforeinstallprompt triggered');
+				e.preventDefault();
+				deferredPrompt = e;
+				modal.style.display = 'block';
+			});
+			
+			window.onclick = function(event) {
+				if(event.target == modal) {
+					modal.style.display = 'none';
+				}
+			}
+			
+			span.onclick = function() {
+                modal.style.display = 'none';
+            }
+            
+            function offlinePrompt() {
+                deferredPrompt.prompt();
+            }
 		</script>
 		<script src="js/phaser.min.js"></script>
 		<script src="js/Tone.min.js"></script>

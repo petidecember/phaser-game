@@ -28,8 +28,8 @@ function preload () { }
 function create () {
 	resize();
 	window.addEventListener('resize', resize, false);
-	window.addEventListener('click', gofull);
-	window.addEventListener('touchstart', gofull);
+	game.canvas.addEventListener('click', gofull);
+	game.canvas.addEventListener('touchstart', gofull);
 
 	graphics = this.add.graphics({lineStyle: { width: 4, color: 0xaa00aa } });
 
