@@ -12,7 +12,7 @@ var config = {
 	}
 }; 
 
-const FFT_LENGTH = 32;
+const FFT_LENGTH = 256;
 const PI2 = Math.PI * 2.0;
 
 var volume = new Tone.Volume(-12);
@@ -51,30 +51,27 @@ function update () {
 		var dir_x = Math.cos(PI2 * index_percent);
 		var dir_y = Math.sin(PI2 * index_percent);
 
-		var begin_x = 384 + 128 * dir_x;
-		var begin_y = 384 + 128 * dir_y;
+		var begin_x = window.innerWidth*window.devicePixelRatio/2 + 128 * dir_x;
+		var begin_y = window.innerHeight*window.devicePixelRatio/2 + 128 * dir_y;
 
-		var end_x = begin_x + values[i] * dir_x;
-		var end_y = begin_y + values[i] * dir_y;
+		var end_x = -values[i] * dir_x;
+		var end_y = -values[i] * dir_y;
 
-		lines[i].setTo(begin_x, begin_y, end_x, end_y);
+		lines[i].setTo(begin_x, begin_y, begin_x + end_x, begin_y + end_y);
 		graphics.strokeLineShape(lines[i]);
 	}
 }
 
 function resize() {
-    var canvas = document.querySelector("canvas");
-    var windowWidth = window.innerWidth;
-    var windowHeight = window.innerHeight;
-    var windowRatio = windowWidth / windowHeight;
-    var gameRatio = game.config.width / game.config.height;
-    if(windowRatio < gameRatio){
-        canvas.style.width = windowWidth + "px";
-        canvas.style.height = (windowWidth / gameRatio) + "px";
-    }
-    else{
-        canvas.style.width = (windowHeight * gameRatio) + "px";
-        canvas.style.height = windowHeight + "px";
+    var canvas = game.canvas, width = window.innerWidth, height = window.innerHeight;
+    var wratio = width / height, ratio = canvas.width / canvas.height;
+ 
+    if (wratio < ratio) {
+        canvas.style.width = width + "px";
+        canvas.style.height = (width / ratio) + "px";
+    } else {
+        canvas.style.width = (height * ratio) + "px";
+        canvas.style.height = height + "px";
     }
 }
 
