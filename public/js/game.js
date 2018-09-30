@@ -50,8 +50,8 @@ function update () {
 		var dir_x = Math.cos(PI2 * index_percent);
 		var dir_y = Math.sin(PI2 * index_percent);
 
-		var begin_x = game.canvas.style.width*window.devicePixelRatio/2 + 128 * dir_x;
-		var begin_y = game.canvas.style.height*window.devicePixelRatio/2 + 128 * dir_y;
+		var begin_x = game.canvas.width/2 + 128 * dir_x;
+		var begin_y = game.canvas.height/2 + 128 * dir_y;
 
 		var end_x = -values[i] * dir_x;
 		var end_y = -values[i] * dir_y;
