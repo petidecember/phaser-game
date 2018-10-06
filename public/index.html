@@ -11,12 +11,29 @@
 	</head>
 	<body>
 		<div id="installModal" class="modal">
-			<div class="modal-content">
+			<div class="modal-header">
+				<p class="modal-title">Add to home screen?</p>
 				<span class="close">X</span>
-				<p>Add to home screen?</p>
+			</div>
+			<div class="modal-content">
 				<button onclick="javascript:offlinePrompt()">Install</button>
 			</div>
 		</div>
+
+		<div id="connectModal" class="modal">
+			<div class="modal-header">
+				<p class="modal-title">Connect</p>
+				<span class="close">X</span>
+			</div>
+			<div class="modal-content">
+				Peer: <input type="text" name="peer">
+				<button onclick="javascript:connect()">Connect</button>
+			</div>
+		</div>
+
+		<button class="button" onclick="javascript:connectPrompt()">Connect</button>
+
+		<!-- PWA Install Modal -->
 		<script>
 			if('serviceWorker' in navigator) {
 				window.addEventListener('load', function() {
@@ -30,33 +47,56 @@
 			}
 			
 			let deferredPrompt;
-			var modal = document.getElementById('installModal');
-			var span = document.getElementsByClassName('close')[0];
-			modal.style.display = 'none';
+			var install_modal = document.getElementById('installModal');
+			var install_span = document.getElementsByClassName('close')[0];
 			
 			window.addEventListener('beforeinstallprompt', function(e) {
 				console.log('beforeinstallprompt triggered');
 				e.preventDefault();
 				deferredPrompt = e;
-				modal.style.display = 'block';
+				install_modal.style.display = 'block';
 			});
 			
 			window.onclick = function(event) {
-				if(event.target == modal) {
-					modal.style.display = 'none';
+				if(event.target == install_modal) {
+					install_modal.style.display = 'none';
 				}
 			}
 			
-			span.onclick = function() {
-                modal.style.display = 'none';
+			install_span.onclick = function() {
+                install_modal.style.display = 'none';
             }
             
             function offlinePrompt() {
                 deferredPrompt.prompt();
             }
 		</script>
+
+		<!-- InGame Connection Modal -->
+		<script>
+			var connect_modal = document.getElementById('connectModal');
+			var connect_span = document.getElementsByClassName('close')[1];
+
+			window.onclick = function(event) {
+				if(event.target == connect_modal) {
+					connect_modal.style.display = 'none';
+				}
+			}
+			
+			connect_span.onclick = function() {
+				connect_modal.style.display = 'none';
+            }
+		</script>
+
+		<script>
+			function connectPrompt() {
+				connect_modal.style.display = 'block';
+			}
+		</script>
+
 		<script src="js/phaser.min.js"></script>
-		<script src="js/Tone.min.js"></script>
+		<!--<script src="js/Tone.min.js"></script>-->
+		<script src="js/peer.min.js"></script>
 		<script src="js/game.js"></script>
 	</body>
 </html>

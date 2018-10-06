@@ -1,3 +1,37 @@
+class Player extends Phaser.Physics.Arcade.Sprite {
+	constructor (scene, x, y, master) {
+		super(scene, x, y, 'doomguy');
+		this.master = master;
+		scene.physics.world.enableBody(this); // Generate Physics Body for the Sprite (same as physics.add.<xyz>())
+		this.setScale(95/800);
+	}
+
+	preUpdate(time, delta) {
+		super.preUpdate(time, delta);
+		if(this.master) // if the player is local
+		{
+			if (cursors.left.isDown)
+			{
+				this.setVelocityX(-260);
+			}
+			else if (cursors.right.isDown)
+			{
+				this.setVelocityX(260);
+			}
+			else
+			{
+				this.setVelocityX(0);
+			}
+
+			if (cursors.up.isDown && this.body.touching.down)
+			{
+				this.setVelocityY(-530);
+			}
+		}
+		this.setCollideWorldBounds(true);
+	}
+}
+
 var config = { 
 	type: Phaser.AUTO, 
 	width: window.innerWidth * window.devicePixelRatio, 
@@ -7,58 +41,57 @@ var config = {
 		create: create, 
 		update: update
 	},
+	physics: {
+		default: 'arcade',
+		arcade: {
+			gravity: { y: 600 },
+			debug: true 
+		},
+	},
 	fps: {
-		target: 30
+		target: 60
 	}
 }; 
+// I am having concerns about the declaration for "connect" being in the html file but i define it here
+function connect()
+{
+	connect_modal.style.display = 'none';
+	console.log('connect');
+}
 
-const FFT_LENGTH = 256;
-const PI2 = Math.PI * 2.0;
-
-var volume = new Tone.Volume(-12);
-var game = new Phaser.Game(config); 
-var fft = new Tone.FFT(FFT_LENGTH);
-var player = new Tone.Player("../audio/Flags on the Moon.mp3", function() { player.start(); }).chain(fft, volume, Tone.Master);
-var req;
-
-var lines = [];
+var game = new Phaser.Game(config);
+var peer = new Peer({host: 'localhost', port: 3000, path:'/peerjs'});
 var graphics;
+var players;
+var cursors;
 
-function preload () { } 
+peer.on('open', function(id) {
+	console.log('Peer: ' + id);
+});
+
+function preload () {
+	this.load.image('block', 'img/block.png');
+	this.load.image('doomguy', 'img/doomguy.jpg');
+}
+
 function create () {
+	cursors = this.input.keyboard.createCursorKeys();
+	
 	resize();
 	window.addEventListener('resize', resize);
 	game.canvas.addEventListener('click', gofull);
-
-	graphics = this.add.graphics({lineStyle: { width: 4, color: 0xaa00aa } });
-
-	for(var i = 0, len = FFT_LENGTH; i < len; i++) {
-		var line = new Phaser.Geom.Line(100, 200, 500, 600);
-		lines[i] = line;
-		graphics.strokeLineShape(line);
-	}
 	
-	req = this.add.text(16, 16, 'request: ', {fontSize: '18px', fill: '#fff'});
+	graphics = this.add.graphics({ fillStyle: { color: 0x00f0ff } });
+
+	players = this.physics.add.group({ allowGravity: true });
+	players.add(new Player(this, 512, 256, true), true);
+
+	var block = this.physics.add.staticImage(512, 768, 'block');
+	this.physics.add.collider(players, block);
 } 
 
 function update () {
 	graphics.clear();
-	var values = fft.getValue();
-
-	for(var i = 0, len = values.length; i < len; i++) {
-		var index_percent = i/len;
-		var dir_x = Math.cos(PI2 * index_percent);
-		var dir_y = Math.sin(PI2 * index_percent);
-
-		var begin_x = game.canvas.width/2 + 128 * dir_x;
-		var begin_y = game.canvas.height/2 + 128 * dir_y;
-
-		var end_x = -values[i] * dir_x;
-		var end_y = -values[i] * dir_y;
-
-		lines[i].setTo(begin_x, begin_y, begin_x + end_x, begin_y + end_y);
-		graphics.strokeLineShape(lines[i]);
-	}
 }
 
 function resize() {
@@ -80,6 +113,4 @@ function gofull() {
 	
 	if(requestFullscreen)
 		requestFullscreen.call(el);
-	req.setText('request: ' + requestFullscreen);
 }
-

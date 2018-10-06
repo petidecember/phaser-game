@@ -1,3 +1,53 @@
 body {
 	margin: 0;
 }
+
+.modal {
+	display: none;
+	position: absolute;
+	z-index: 1;
+	overflow: auto;
+	background-color: #fefefe;
+	padding: 20px;
+	border: 1px solid #888;
+	width: 32rem;
+	top: 25%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+
+.modal-header {
+	padding-bottom: 28px;
+}
+
+.modal-title {
+	display: inline;
+	font-size: 36px;
+}
+
+.modal-content {
+	font-size: 18px;
+}
+
+.close {
+	float: right;
+	color: #aaa;
+	font-size: 28px;
+	font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+	color: black;
+	text-decoration: none;
+	cursor: pointer;
+}
+
+.button {
+	position: fixed;
+	width: 10rem;
+	height: 3rem;
+	margin-left: 2%;
+	margin-top: 2%;
+	font-size: 18px;
+}

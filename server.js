@@ -1,27 +1,29 @@
-//var PORT = 1337;
-
 var express = require('express');
 var app = express();
-//var server = require('http').Server(app);
-
-var dgram = require('dgram');
-//var WebSocket= require('ws');
-//var wss = new WebSocket.Server({port: PORT});
-
+var ExpressPeerServer = require('peer').ExpressPeerServer;
 app.use(express.static("public"));
 
-/*wss.on('connection', function(ws) {
-	ws.on('message', function (message) {
-		var msgBuff = Buffer.from(message);
-		console.log(message);
-		wss.clients.forEach(function each(client) {
-			if (client !== ws && client.readyState === WebSocket.OPEN) {
-				client.send("yeet");
-			}
-		});
-	});
-});*/
-
-app.listen(process.env.PORT || 3000, function(){
+var webserver = app.listen(process.env.PORT || 3000, function(){
   console.log('listening on *:' + (process.env.PORT || 3000));
+});
+
+var options = {
+	debug: true,
+	allow_discovery: true
+};
+
+var peerserver = ExpressPeerServer(webserver, options);
+app.use('/peerjs', peerserver);
+
+var peers = [];
+
+peerserver.on('connection', function(id) {
+	console.log('connected by id: ' + id);
+	peers.push(id);
+});
+
+peerserver.on('disconnect', function(id) {
+	console.log('disconnected by id: ' + id);
+	var idx = peers.indexOf(id);
+	if(idx > -1) { peers.splice(idx, 1); }
 });

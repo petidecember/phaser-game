@@ -4,10 +4,11 @@ var filesToCache = [
 	'/index.html',
 	'/style.css',
 	'/favicon.ico',
-	'/audio/Flags on the Moon.mp3',
 	'/js/game.js',
 	'/js/phaser.min.js',
-	'/js/Tone.min.js'
+	'/js/Tone.min.js',
+	'/img/doomguy.jpg',
+	'/img/block.png'
 ];
 
 self.addEventListener('install', function(event) {
