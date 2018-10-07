@@ -1,4 +1,4 @@
-var express = require('express'),
+/*var express = require('express'),
 	app = express(),
 	ExpressPeerServer = require('peer').ExpressPeerServer;
 
@@ -14,7 +14,10 @@ var webserver = app.listen(process.env.PORT || 3000, function(){
 });
 
 var peerserver = ExpressPeerServer(webserver, options);
-app.use('/peerjs', peerserver);
+app.use('/peerjs', peerserver);*/
+
+var PeerServer = require('peer').PeerServer;
+var peerserver = PeerServer({port: process.env.PORT || 3000, path: '/peerjs'});
 
 var peers = [];
 
