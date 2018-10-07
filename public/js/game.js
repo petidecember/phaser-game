@@ -54,7 +54,7 @@ var config = {
 }; 
 
 var game = new Phaser.Game(config);
-var peer = new Peer({host: 'localhost', port: 3000, path:'/peerjs'});
+var peer = new Peer({host: 'localhost', port: 5000, path:'/peerjs'});
 var connection;
 var graphics;
 var players;
