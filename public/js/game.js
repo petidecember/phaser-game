@@ -52,21 +52,35 @@ var config = {
 		target: 60
 	}
 }; 
+
+var game = new Phaser.Game(config);
+var peer = new Peer({host: 'localhost', port: 3000, path:'/peerjs'});
+var connection;
+var graphics;
+var players;
+var cursors;
+
 // I am having concerns about the declaration for "connect" being in the html file but i define it here
 function connect()
 {
 	connect_modal.style.display = 'none';
 	console.log('connect');
+	var peerid = document.getElementById('peerid').value;
+	connection = peer.connect(peerid);
+	for(var i = 0; i < 128; i++) {
+		connection.send('ping');
+	}
 }
-
-var game = new Phaser.Game(config);
-var peer = new Peer({host: 'localhost', port: 3000, path:'/peerjs'});
-var graphics;
-var players;
-var cursors;
 
 peer.on('open', function(id) {
 	console.log('Peer: ' + id);
+});
+
+peer.on('connection', function(conn)
+{
+	conn.on('data', function(data) {
+		console.log(data);
+	});
 });
 
 function preload () {

@@ -1,16 +1,17 @@
-var express = require('express');
-var app = express();
-var ExpressPeerServer = require('peer').ExpressPeerServer;
-app.use(express.static("public"));
-
-var webserver = app.listen(process.env.PORT || 3000, function(){
-  console.log('listening on *:' + (process.env.PORT || 3000));
-});
+var express = require('express'),
+	app = express(),
+	ExpressPeerServer = require('peer').ExpressPeerServer;
 
 var options = {
 	debug: true,
 	allow_discovery: true
 };
+
+app.use(express.static("public"));
+
+var webserver = app.listen(process.env.PORT || 3000, function(){
+  console.log('listening on *:' + (process.env.PORT || 3000));
+});
 
 var peerserver = ExpressPeerServer(webserver, options);
 app.use('/peerjs', peerserver);
