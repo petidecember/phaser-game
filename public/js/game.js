@@ -55,6 +55,7 @@ var config = {
 
 var game = new Phaser.Game(config);
 var peer = new Peer({host: 'phasermulti-test.herokuapp.com', port: 5000, path:'/peerjs'});
+var localid;
 var connection;
 var graphics;
 var players;
@@ -74,6 +75,7 @@ function connect()
 
 peer.on('open', function(id) {
 	console.log('Peer: ' + id);
+	localid = id;
 });
 
 peer.on('connection', function(conn)
@@ -102,6 +104,8 @@ function create () {
 
 	var block = this.physics.add.staticImage(512, 768, 'block');
 	this.physics.add.collider(players, block);
+
+	var text = this.add.text(16, 16, 'PID: ' + localid, {fontSize: '32px', fill: '#fff'});
 } 
 
 function update () {
